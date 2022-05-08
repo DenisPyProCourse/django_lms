@@ -1,11 +1,17 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 
+from .forms import StudentCreateForm
 from .models import Student
 from .utils import qs2html
 
 from webargs.fields import Str, Int
 from webargs.djangoparser import use_args
+
+
+def index(request):
+    return HttpResponse('LMS System!')
 
 
 @use_args(
@@ -21,5 +27,42 @@ def get_students(request, args):
     for key, value in args.items():
         st = st.filter(**{key: value})      # key=value
 
+    html_form = """
+        <form method="get">
+            <label for="fname">First name:</label><br>
+            <input type="text" id="fname" name="first_name" placeholder="Bob"><br>
+            <label for="lname">Last name:</label><br>
+            <input type="text" id="lname" name="last_name" placeholder="Dilan"><br>
+            <label for="age_id">Age:</label><br>
+            <input type="number" id="age_id" name="age" placeholder="45"><br>	<br>
+            
+            <input type="submit" value="Submit">
+        </form> 
+    """
     html = qs2html(st)
-    return HttpResponse(html)
+    response = html_form + html
+
+    return HttpResponse(response)
+
+
+@csrf_exempt
+def create_student(request):
+    if request.method == 'GET':
+        form = StudentCreateForm()
+    else:
+        form = StudentCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect('/students/')
+
+    html_form = f"""
+            <form method="post">
+                <table>
+                    {form.as_table()}
+                </table>
+                <input type="submit" value="Submit">
+            </form> 
+        """
+
+    return HttpResponse(html_form)
