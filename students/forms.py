@@ -10,8 +10,10 @@ class StudentCreateForm(forms.ModelForm):
             # '__all__'
             'first_name',
             'last_name',
-            'age',
+            'phone_number',
+            # 'age',
             'birthday'
+
         ]
 
         widgets = {

@@ -19,12 +19,14 @@ from django.urls import path
 from students.views import create_student
 from students.views import get_students
 from students.views import index
+from students.views import update_student
 
 # CRUD - Create, Read, Update, Delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('students/', get_students),        # Read
-    path('students/create/', create_student),
+    path('students/', get_students),                # Read
+    path('students/create/', create_student),       # Create
+    path('students/update/<int:pk>/', update_student),       # Update
 ]
