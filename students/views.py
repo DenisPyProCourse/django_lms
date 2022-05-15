@@ -1,17 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from .forms import StudentCreateForm
 from .models import Student
-from .utils import qs2html
 
 from webargs.fields import Str, Int
 from webargs.djangoparser import use_args
-
-
-def index(request):
-    return HttpResponse('LMS System!')
 
 
 @use_args(
@@ -27,22 +22,6 @@ def get_students(request, args):
     for key, value in args.items():
         st = st.filter(**{key: value})      # key=value
 
-    # html_form = """
-    #     <form method="get">
-    #         <label for="fname">First name:</label><br>
-    #         <input type="text" id="fname" name="first_name" placeholder="Bob"><br>
-    #         <label for="lname">Last name:</label><br>
-    #         <input type="text" id="lname" name="last_name" placeholder="Dilan"><br>
-    #         <label for="age_id">Age:</label><br>
-    #         <input type="number" id="age_id" name="age" placeholder="45"><br>	<br>
-    #
-    #         <input type="submit" value="Search">
-    #     </form>
-    # """
-    # html = qs2html(st)
-    # response = html_form + html
-
-    # return HttpResponse(response)
     return render(
         request,
         'students/list.html',
@@ -50,7 +29,6 @@ def get_students(request, args):
     )
 
 
-@csrf_exempt
 def create_student(request):
     if request.method == 'GET':
         form = StudentCreateForm()
@@ -59,23 +37,17 @@ def create_student(request):
         if form.is_valid():
             form.save()
 
-            return HttpResponseRedirect('/students/')
+            return HttpResponseRedirect(reverse('list'))
 
-    html_form = f"""
-            <form method="post">
-                <table>
-                    {form.as_table()}
-                </table>
-                <input type="submit" value="Create">
-            </form> 
-        """
-
-    return HttpResponse(html_form)
+    return render(
+        request=request,
+        template_name='students/create.html',
+        context={'form': form}
+    )
 
 
-@csrf_exempt
 def update_student(request, pk):
-    student = Student.objects.get(pk=pk)
+    student = get_object_or_404(Student, pk=pk)
     if request.method == 'GET':
         form = StudentCreateForm(instance=student)
     else:
@@ -83,15 +55,17 @@ def update_student(request, pk):
         if form.is_valid():
             form.save()
 
-            return HttpResponseRedirect('/students/')
+            return HttpResponseRedirect(reverse('list'))
 
-    html_form = f"""
-            <form method="post">
-                <table>
-                    {form.as_table()}
-                </table>
-                <input type="submit" value="Update">
-            </form> 
-        """
+    return render(request, 'students/update.html', {'form': form})
 
-    return HttpResponse(html_form)
+
+def delete_student(request, pk):
+    # student = Student.objects.get(pk=pk)
+    student = get_object_or_404(Student, pk=pk)
+
+    if request.method == 'POST':
+        student.delete()
+        return HttpResponseRedirect(reverse('list'))
+
+    return render(request, 'students/delete.html', {'student': student})

@@ -28,3 +28,11 @@ class StudentCreateForm(forms.ModelForm):
     def clean_last_name(self):
         ln = self.cleaned_data['last_name']
         return ln.title()
+
+    def clean_phone_number(self):
+        pn = self.cleaned_data['phone_number']
+        lst = []
+        for element in pn:
+            if element in '()+ 0123456789':
+                lst.append(element)
+        return ''.join(lst)

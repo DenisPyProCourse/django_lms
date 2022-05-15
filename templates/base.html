@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LMS - {% block title %}{% endblock %}</title>
+    <style>
+        #menu {
+            font-family: arial, sans-serif;
+            width: 50%;
+        }
+        {% block style %}{% endblock %}
+    </style>
+</head>
+<body>
+    <table id="menu">
+        <tr>
+            <td style="margin: 5px; padding: 5px;"><a href="/">Home</a></td>
+            <td style="margin: 5px; padding: 5px;"><a href="{% url 'list' %}">List</a></td>
+            <td style="margin: 5px; padding: 5px;"><a href="{% url 'create' %}">Create</a></td>
+        </tr>
+    </table>
+    {% block content %}{% endblock %}
+</body>
+</html>
