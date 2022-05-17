@@ -1,24 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LMS - {% block title %}{% endblock %}</title>
-    <style>
-        #menu {
-            font-family: arial, sans-serif;
-            width: 50%;
-        }
-        {% block style %}{% endblock %}
-    </style>
-</head>
-<body>
-    <table id="menu">
-        <tr>
-            <td style="margin: 5px; padding: 5px;"><a href="/">Home</a></td>
-            <td style="margin: 5px; padding: 5px;"><a href="{% url 'list' %}">List</a></td>
-            <td style="margin: 5px; padding: 5px;"><a href="{% url 'create' %}">Create</a></td>
-        </tr>
-    </table>
-    {% block content %}{% endblock %}
-</body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+  </head>
+  <body>
+    {% include 'includes/menu.html' %}
+    <div class="container mt-4 pt-5">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+  </body>
 </html>

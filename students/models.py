@@ -1,11 +1,14 @@
 import datetime
 
+from core.validators import adult_validator
+
 from dateutil.relativedelta import relativedelta
+
 from django.core.validators import MinLengthValidator
 from django.db import models
+
 from faker import Faker
 
-from core.validators import adult_validator
 from .validators import phone_number_validator
 
 
@@ -22,7 +25,6 @@ class Student(models.Model):
         validators=[MinLengthValidator(2)],
         db_column='l_name'
     )
-    age = models.PositiveIntegerField()
     birthday = models.DateField(
         default=datetime.date.today,
         validators=[adult_validator]
@@ -36,11 +38,10 @@ class Student(models.Model):
         db_table = 'students'
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.age} - {self.phone_number}'
+        return f'{self.first_name} {self.last_name} {self.phone_number}'
 
-    def save(self, *args, **kwargs):
-        self.age = relativedelta(datetime.date.today(), self.birthday).years
-        super().save(*args, **kwargs)
+    def get_age(self):
+        return relativedelta(datetime.date.today(), self.birthday).years
 
     @staticmethod
     def gen_students(cnt=10):
@@ -50,7 +51,8 @@ class Student(models.Model):
                 first_name=fk.first_name(),
                 last_name=fk.last_name(),
                 age=fk.random_int(min=18, max=45),
-                birthday=fk.date_between(start_date='-65y', end_date='-15y')
+                birthday=fk.date_between(start_date='-65y', end_date='-15y'),
+                phone_number=fk.phone_number()
             )
 
             st.save()

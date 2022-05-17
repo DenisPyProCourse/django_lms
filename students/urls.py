@@ -7,7 +7,7 @@ from .views import update_student
 
 # CRUD - Create, Read, Update, Delete
 
-# app_name = 'students'
+app_name = 'students'
 
 urlpatterns = [
     path('', get_students, name='list'),                              # Read
