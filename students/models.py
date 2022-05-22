@@ -11,6 +11,8 @@ from faker import Faker
 
 from .validators import phone_number_validator
 
+from groups.models import Group
+
 
 class Student(models.Model):
     first_name = models.CharField(
@@ -31,6 +33,7 @@ class Student(models.Model):
         # validators=[AdultValidator(20)]
     )
     phone_number = models.CharField(max_length=25, null=True, validators=[phone_number_validator])
+    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='students')
 
     class Meta:
         verbose_name = 'student'

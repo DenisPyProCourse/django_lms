@@ -1,7 +1,8 @@
 crispy-bootstrap5==0.6
 Django==4.0.4
 django-extensions==3.1.5
-Faker==13.7.0
+django-filter==21.1
+Faker==13.11.1
 flake8==4.0.1
 flake8-builtins==1.5.3
 flake8-import-order==0.18.1

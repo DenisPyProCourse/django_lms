@@ -2,30 +2,19 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from webargs.djangoparser import use_args
-from webargs.fields import Int, Str
-
 from .forms import StudentCreateForm
+from .forms import StudentFilterForm
 from .models import Student
 
 
-@use_args(
-    {
-        'first_name': Str(required=False),       # , missing=None)
-        'last_name': Str(required=False),
-        'age': Int(required=False)
-    },
-    location='query'
-)
-def get_students(request, args):
-    st = Student.objects.all()
-    for key, value in args.items():
-        st = st.filter(**{key: value})      # key=value
+def get_students(request):
+    students = Student.objects.all()
+    students_filter = StudentFilterForm(data=request.GET, queryset=students)
 
     return render(
         request,
         'students/list.html',
-        {'title': 'List of students', 'students': st}
+        {'students_filter': students_filter}
     )
 
 
