@@ -1,39 +1,21 @@
-import datetime
+import random
 
-from core.validators import adult_validator
+from core.models import BaseModel
 
-from dateutil.relativedelta import relativedelta
-
-from django.core.validators import MinLengthValidator
 from django.db import models
 
 from faker import Faker
 
-from .validators import phone_number_validator
-
 from groups.models import Group
 
 
-class Student(models.Model):
-    first_name = models.CharField(
-        max_length=100,
-        verbose_name='first name',
-        validators=[MinLengthValidator(2)],
-        db_column='f_name'
+class Student(BaseModel):
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='students'
     )
-    last_name = models.CharField(
-        max_length=100,
-        verbose_name='last name',
-        validators=[MinLengthValidator(2)],
-        db_column='l_name'
-    )
-    birthday = models.DateField(
-        default=datetime.date.today,
-        validators=[adult_validator]
-        # validators=[AdultValidator(20)]
-    )
-    phone_number = models.CharField(max_length=25, null=True, validators=[phone_number_validator])
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, related_name='students')
 
     class Meta:
         verbose_name = 'student'
@@ -43,19 +25,9 @@ class Student(models.Model):
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.phone_number}'
 
-    def get_age(self):
-        return relativedelta(datetime.date.today(), self.birthday).years
-
-    @staticmethod
-    def gen_students(cnt=10):
-        fk = Faker()
-        for _ in range(cnt):
-            st = Student(
-                first_name=fk.first_name(),
-                last_name=fk.last_name(),
-                age=fk.random_int(min=18, max=45),
-                birthday=fk.date_between(start_date='-65y', end_date='-15y'),
-                phone_number=fk.phone_number()
-            )
-
-            st.save()
+    @classmethod
+    def _generate(cls):
+        obj = super()._generate()
+        groups = Group.objects.all()
+        obj.group = random.choice(groups)
+        obj.save()

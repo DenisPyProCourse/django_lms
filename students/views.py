@@ -8,7 +8,7 @@ from .models import Student
 
 
 def get_students(request):
-    students = Student.objects.all()
+    students = Student.objects.all().select_related('group', 'headman_group')
     students_filter = StudentFilterForm(data=request.GET, queryset=students)
 
     return render(

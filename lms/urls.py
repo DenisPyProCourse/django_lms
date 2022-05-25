@@ -24,6 +24,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('students/', include('students.urls')),
     path('groups/', include('groups.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 

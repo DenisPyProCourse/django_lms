@@ -7,6 +7,7 @@
         <tr>
             <th>N</th>
             <th>Name</th>
+            <th>Headman</th>
             <th>Start date</th>
             <th>End date</th>
             <th><i class="bi bi-pencil-fill"></i></th>
@@ -15,6 +16,7 @@
         <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ group.name }}</td>
+            <td>{{ group.headman.last_name }} {{ group.headman.first_name }}</td>
             <td>{{ group.start_date }}</td>
             <td>{% if group.end_date %}{{ group.end_date }}{% endif %}</td>
             <td><a href="{% url 'groups:update' group.pk %}">Update</a></td>

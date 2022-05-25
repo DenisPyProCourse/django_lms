@@ -6,11 +6,12 @@ from .models import Group
 class GroupBaseForm(forms.ModelForm):
     class Meta:
         model = Group
-        fields = [
-            'name',
-            'start_date',
-            'end_date'
-        ]
+        fields = '__all__'
+        # [
+        #     'name',
+        #     'start_date',
+        #     'end_date'
+        # ]
 
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
