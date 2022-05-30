@@ -4,8 +4,6 @@ from core.models import BaseModel
 
 from django.db import models
 
-from faker import Faker
-
 from groups.models import Group
 
 

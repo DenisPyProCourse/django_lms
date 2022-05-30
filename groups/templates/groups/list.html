@@ -11,8 +11,9 @@
             <th>Start date</th>
             <th>End date</th>
             <th><i class="bi bi-pencil-fill"></i></th>
+            <th><i class="bi bi-trash-fill"></i></th>
         </tr>
-        {% for group in groups %}
+        {% for group in object_list %}
         <tr>
             <td>{{ forloop.counter }}</td>
             <td>{{ group.name }}</td>
@@ -20,6 +21,7 @@
             <td>{{ group.start_date }}</td>
             <td>{% if group.end_date %}{{ group.end_date }}{% endif %}</td>
             <td><a href="{% url 'groups:update' group.pk %}">Update</a></td>
+            <td><a href="{% url 'groups:delete' group.pk %}">Delete</a></td>
         </tr>
         {% endfor %}
     </table>

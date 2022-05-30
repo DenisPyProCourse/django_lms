@@ -15,7 +15,7 @@
         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <form method="get">
-                {{ students_filter.form | crispy }}
+                {{ object_list.form | crispy }}
                 <input class="btn btn-outline-primary" type="submit" value="Search">
             </form>
           </div>
@@ -23,7 +23,7 @@
       </div>
     </div>
     <br>
-    {% with list_object=students_filter.qs on_group=True %}
+    {% with list_object=object_list.qs on_group=True %}
         {% include 'includes/students_list_table.html' %}
     {% endwith %}
 {% endblock %}

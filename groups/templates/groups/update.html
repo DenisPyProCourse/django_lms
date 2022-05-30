@@ -11,7 +11,7 @@
         <button class="btn btn-success mt-3" type="submit">Update</button>
         <a class="btn btn-primary mt-3" href="{% url 'groups:list' %}">Cancel</a>
     </form>
-    {% with list_object=group.students.all on_group=False %}
+    {% with list_object=students on_group=False %}
         {% include 'includes/students_list_table.html' %}
     {% endwith %}
 {% endblock %}
