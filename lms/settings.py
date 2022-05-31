@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
     'groups.apps.GroupsConfig',
     'teachers.apps.TeachersConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,5 @@ INTERNAL_IPS = [
 if DEBUG:
     SHELL_PLUS = 'ipython'
     SHELL_PLUS_PRINT_SQL = True
+
+EMAIL_PORT = 1025

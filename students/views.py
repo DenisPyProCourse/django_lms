@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse, reverse_lazy
@@ -39,7 +41,7 @@ def create_student(request):
     )
 
 
-class UpdateStudentView(UpdateView):
+class UpdateStudentView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'identity'
     model = Student
     form_class = StudentCreateForm
@@ -47,6 +49,7 @@ class UpdateStudentView(UpdateView):
     template_name = 'students/update.html'
 
 
+@login_required
 def delete_student(request, pk):
     # student = Student.objects.get(pk=pk)
     student = get_object_or_404(Student, pk=pk)
