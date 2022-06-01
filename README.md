@@ -132,3 +132,53 @@ headman = models.OneToOneField(
 - Создали новые view (**DeleteGroupView**) и шаблон (**group_confirm_delete.html**) для удаления группы
 - Создали новое view (**ListStudentView**) для отображения списка студентов
   - Чтоб отобразить форму фильтра на странице, переопределили метод **get_queryset**.
+
+## Lesson 09
+- Создаём новое приложение "**Accounts**"
+- Создаём форму регистрации (**AccountRegistrationForm**)
+- Добавляем маршруты на страницы регистрации, логина и логаута
+- Добавляем view классы для обработки маршрутов:
+  - логина (**AccountLoginView**)
+  - логаута (**AccountLogoutView**)
+  - регистрации (**AccountRegistrationView**)
+- Добавляем шаблоны:
+  - в шаблоны приложения accounts
+    - templates/accounts/login.html
+    - templates/accounts/logout.html
+    - templates/accounts/registration.html
+  - в шаблоны проекта
+    - templates/password_change_done.html
+    - templates/password_change_form.html
+    - templates/password_reset_complete.html
+    - templates/password_reset_confirm.html
+    - templates/password_reset_done.html
+    - templates/password_reset_form.html
+- Чтоб проверить систему сброса пароля, надо запустить отладочный почтовый сервер:
+  ```shell
+  python -m smtpd -n -c DebuggingServer localhost:1025
+  ```
+- В **settings.py** добавляем:
+  ```python
+  EMAIL_PORT = 1025
+  ```
+- В главный маршрутизатор добавляем маршрут обслуживающий запросы для сброса и изменения пароля:
+  ```python
+  path('accounts/', include('django.contrib.auth.urls')),
+  ```
+- Добавили проверки, авторизован пользователь или нет, в шаблон (меню)
+- Эти проверки позволяют:
+  - динамически менять меню пользователя
+  - прятать некоторые пункты главного меню
+- Добавили проверки в view:
+  - в классы на основе миксинов - **LoginRequiredMixin**
+  - в методы на основе декораторов - **@login_required**
+- Добавили профиль пользователя:
+  - создали модель **Profile** и связали с пользователем **One-2-One**
+  - создали две формы редактирования пользователя (**UserUpdateForm**) и профиля (**ProfileUpdateForm**)
+  - создали две view:
+    - метод **account_view** для отображения аккаунта
+    - класс **AccountUpdateView** для изменения аккаунта
+    - добавили два шаблона:
+      - profile.html - для отображения аккаунта
+      - update.html - для обновления/изменения аккаунта
+  - создаём **сигнал** для автоматического создания профиля после создания пользователя.
