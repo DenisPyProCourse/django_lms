@@ -206,3 +206,57 @@ headman = models.OneToOneField(
 пользователя (**CalculateRequestTimeMiddleware**)
 - Создаём новый **include HTML** файл для отображения сообщений (**messages.html**)
 - Добавляем сообщение на событие входа пользователя
+
+## Lesson 11 (Paginator, Context-processor, Signals, Flat pages, CKEditor)
+- Добавили в админку группы Inline таблицу списка учителей
+- Пагинация
+  ```python
+  from students.models import Student
+  from django.core.paginator import Paginator
+  
+  st = Student.objects.all().order_by('pk')
+  p = Paginator(st, 10)
+  
+  p.count                     # общее кол-во записей
+  p.num_pages                 # кол-во страниц пагинации
+  p.page_range                # диапазон номеров страниц
+  
+  page = p.page(5)            # получаем страницу под номером 5
+  page.object_list            # список записей на странице
+  page.start_index()          # индекс первой записи на странице относительно общего кол-ка записей
+  page.has_previous           # возвращает True если есть предыдущая страница, иначе False
+  page.previous_page_number   # возвращает номер предыдущей страницы
+  page.has_next               # возвращает True если есть следующая страница, иначе False
+  page.next_page_number       # возвращает номер следующей страницы
+  ```
+  - добавляем пагинатор на страницу отображения списка студентов
+    - изменяем метод **get_queryset** в представлении **ListStudentView**, возвращаем чистый **queryset**
+    - переопределяем метод **get_context_data**, добавляем в него форму фильтра
+    - создаем метод **get_filter** возвращающий объект фильтра
+    - в класс **ListStudentView** добавляем атрибут **paginate_by**
+    - создаём доп. HTML файл **paginator.html** и вставляем в него код пагинатора из документации **Django**
+    - в базовом шаблоне подключаем пагинатор используя проверку атрибута **is_paginated**
+    - изменяем стандартный вид пагинатора на оформление из **bootstrap**
+    - добавляем кнопки **First** и **Last**
+
+- Исправляем **GET** запрос при использовании фильтра вместе с пагинатором
+  - изменяем **view** отображения списка студентов или
+  - создаём **context-processor**
+- Система сигналов
+- **Flat pages** - плоские страницы
+- Подключаем **WYSIWYG** редактор - [CKEditor](https://django-ckeditor.readthedocs.io/en/latest/)
+  - для исправления отображения картинки на странице необходимо сделать следующие изменения
+  ```python
+  # settings.py
+  
+  MEDIA_URL = 'media/'
+  MEDIA_ROOT = BASE_DIR / 'media'
+  ```
+  
+  ```python
+  # urls.py (маршрутизатор проекта)
+  
+  if settings.DEBUG:
+      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+  ```
+  после надо обновить **Content** на странице **About**

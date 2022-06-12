@@ -4,6 +4,32 @@ from groups.models import Group
 from students.models import Student
 
 
+class TeachersInlineTable(admin.TabularInline):
+    model = Group.teachers.through
+    extra = 0
+    can_delete = False
+
+    fields = [
+        'first_name',
+        'last_name',
+        'salary',
+    ]
+
+    readonly_fields = fields
+
+    def has_add_permission(self, request, obj):
+        return False
+
+    def first_name(self, obj):
+        return obj.teacher.first_name
+
+    def last_name(self, obj):
+        return obj.teacher.last_name
+
+    def salary(self, obj):
+        return obj.teacher.salary
+
+
 class StudentsInlineTable(admin.TabularInline):
     model = Student
     fields = [
@@ -15,6 +41,7 @@ class StudentsInlineTable(admin.TabularInline):
 
     extra = 0
     readonly_fields = fields
+    can_delete = False
     # [
     #     'first_name',
     #     'last_name',
@@ -25,8 +52,8 @@ class StudentsInlineTable(admin.TabularInline):
     def has_add_permission(self, request, obj):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -47,7 +74,7 @@ class GroupAdmin(admin.ModelAdmin):
 
     readonly_fields = ['create_datetime', 'update_datetime']
 
-    inlines = [StudentsInlineTable, ]
+    inlines = [StudentsInlineTable, TeachersInlineTable]
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
