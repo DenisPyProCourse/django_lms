@@ -207,7 +207,7 @@ headman = models.OneToOneField(
 - Создаём новый **include HTML** файл для отображения сообщений (**messages.html**)
 - Добавляем сообщение на событие входа пользователя
 
-## Lesson 11 (Paginator, Context-processor, Signals, Flat pages, CKEditor)
+## Lesson 11 (Paginator, Context-processor, Signals, Flat pages, CKEditor, Avatars)
 - Добавили в админку группы Inline таблицу списка учителей
 - Пагинация
   ```python
@@ -260,3 +260,9 @@ headman = models.OneToOneField(
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
   ```
   после надо обновить **Content** на странице **About**
+- Добавляем в профиль аватарку
+  - меняем модель профиля
+  - меняем форму обновления профиля
+  - меняем представление AccountUpdateView
+  - меняем шаблон accounts/update.html
+  - изменяем админку для отображения пользователя и профиля
